@@ -1,12 +1,6 @@
 /*
- * ESP32 wifi Server to control multiple loads controlled by other esp32s
+ * ESP32 wifi Mother Server for roject: Decentralized Fire Security Alarm
  * via Server-Client relationship.
- * 
- * ip/light/1/0 - light 1 off
- * ip/light/1/1- light 1 on
- * 
- * ip/light/2/0 - light 2 off
- * ip/light/2/1 - light 2 on
  * 
  * author: ashraf minhaj
  * mail  : ashraf_minhaj@yahoo.com
@@ -16,8 +10,8 @@
 #include <WiFi.h>
 
 
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "SASIMISI";
+const char* password = "ditamna007";
 
 // define light pins
 int light1 = 23;
@@ -72,8 +66,8 @@ void setup() {
 
 void loop() {
   // state vars
-  int val1 = 0;
-  int val2 = 0;
+  int val1 = 3;
+  int val2 = 3;
   
   // Check if a client has connected
   WiFiClient client = server.available();
@@ -111,27 +105,27 @@ void loop() {
             }
   }
 
-
-  // Set GPIO according to the requests
-//  digitalWrite(light1, val1);
-//  digitalWrite(light2, val2);
-
   if (val1 == 1) {
     digitalWrite(light1, HIGH);
   }
-  if (val1 != 1) {
+  if (val1 == 0) {
    digitalWrite(light1, LOW);
+   delay(100);
   } 
   if (val2 == 1) {
     digitalWrite(light2, HIGH);
   }
-  if (val2 != 1) {
+  if (val2 == 0) {
     digitalWrite(light2, LOW);
   }
 
-  Serial.println("Client disonnected");
-
-
-  // The client will actually be disconnected
-  // when the function returns and 'client' object is detroyed
+  if (val2 == 3) {
+    digitalWrite(light1, HIGH);
+    delay(100);
+  }
+  if (val2 == 3) {
+    digitalWrite(light2, HIGH);
+    delay(100);
+  }
+  
 }
