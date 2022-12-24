@@ -16,8 +16,8 @@
 #include <WiFi.h>
 
 
-const char* ssid = "SASIMISI";
-const char* password = "ditamna007";
+const char* ssid = "";
+const char* password = "";
 
 // define light pins
 int light1 = 23;
@@ -74,28 +74,24 @@ void loop() {
   // state vars
   int val1 = 0;
   int val2 = 0;
-   
+  
   // Check if a client has connected
   WiFiClient client = server.available();
-  if (!client) {
-    return;
-  }
 
-
-  // Wait until the client sends some data
-  Serial.println("new client");
-  while (!client.available()) {
-    delay(1);
-  }
+  // Match the request
+  if (client) {
+    
+    // Wait until the client sends some data
+    Serial.println("new client");
+    while (!client.available()) {
+      delay(1);
+      }
 
 
   // Read the first line of the request
   String req = client.readStringUntil('\r');
   Serial.println(req);
   client.flush();
-
-
-  // Match the request
   if (req.indexOf("/light/1/0") != -1) {
     val1 = 0;
     }
@@ -113,23 +109,26 @@ void loop() {
             client.stop();
             return;
             }
+  }
 
 
   // Set GPIO according to the requests
-  digitalWrite(light1, val1);
-  digitalWrite(light2, val2);
+//  digitalWrite(light1, val1);
+//  digitalWrite(light2, val2);
 
-  client.flush();
+  if (val1 == 1) {
+    digitalWrite(light1, HIGH);
+  }
+  if (val1 != 1) {
+   digitalWrite(light1, LOW);
+  } 
+  if (val2 == 1) {
+    digitalWrite(light2, HIGH);
+  }
+  if (val2 != 1) {
+    digitalWrite(light2, LOW);
+  }
 
-//  // Prepare the response
-//  String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n\r\n\r\nLight is now ";
-//  s += (val1) ? "high" : "low";
-//  s += (val2) ? "high" : "low";
-//  s += "\n";
-
-  // Send the response to the client
-  client.print("<h1>Yo boy</h1>");
-  delay(1);
   Serial.println("Client disonnected");
 
 

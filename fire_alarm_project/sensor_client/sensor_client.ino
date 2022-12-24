@@ -1,10 +1,10 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-String server_ip = "http://192.168.0.107";
+String server_ip = "http://192.168.0.109";
 
-const char* ssid = "SASIMISI";
-const char* password =  "ditamna007";
+const char* ssid = "";
+const char* password =  "";
 
 int buttonPin     = 23;     
 int sensorPin     = 22;
@@ -18,7 +18,7 @@ void send_req(String stat){
   
    HTTPClient http;   
   
-   http.begin(server_ip + "/light/1/" + stat);  //Specify destination for HTTP request
+   http.begin(server_ip + "/light/2/" + stat);  //Specify destination for HTTP request
   
    int httpResponseCode = http.GET();   //Send the actual GET request
   
@@ -62,9 +62,17 @@ void loop() {
   Serial.println(buttonState);
 
   // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if ((digitalRead(buttonPin)) || (digitalRead(sensorPin))) {
+  if ((digitalRead(buttonPin) == HIGH) || (digitalRead(sensorPin) == LOW)) {
     Serial.println("We enter here");
     // turn LED on:
-    send_req("0");
+    send_req("1");
   } 
+//if (digitalRead(buttonPin) == HIGH) {
+//    Serial.println("We enter here");
+//    // turn LED on:
+//    send_req("1");
+//  }
+//  else {
+//    send_req("0");
+//  }
 }
